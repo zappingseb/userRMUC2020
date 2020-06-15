@@ -36,11 +36,12 @@ RUN install2.r --error \
     shiny \
     shinyjs \
     shinytest \
+    webdriver \
     webshot \
     ## clean up
     && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
 
-RUN R --vanilla -e "shinytest::installDependencies()"
+RUN R --vanilla -e "webdriver::install_phantomjs()"
 
 COPY . $HOME/src/
 
