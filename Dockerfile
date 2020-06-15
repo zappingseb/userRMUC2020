@@ -1,4 +1,4 @@
-FROM rocker/tidyverse
+FROM rocker/tidyverse:3.6.3
 MAINTAINER Sebastian Engel-Wolf (sebastian@mail-wolf.de)
 
 RUN apt-get update \
@@ -48,5 +48,5 @@ WORKDIR $HOME/src/
 
 RUN R CMD build .
 
-RUN R CMD check *tar.gz
+RUN R CMD check --no-manual *tar.gz
 

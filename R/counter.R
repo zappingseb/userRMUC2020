@@ -1,4 +1,5 @@
 #' @export
+#' @import shiny
 counterButton <- function(id, label = "Counter") {
   ns <- NS(id)
   tagList(

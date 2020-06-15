@@ -1,5 +1,5 @@
 Package: useRMUCDemo
-Title: A Demo of an R-package with an interactive UI test.
+Title: A Demo of an R-package with an interactive UI test
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "SEbastian",
