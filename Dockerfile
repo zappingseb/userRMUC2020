@@ -48,7 +48,7 @@ WORKDIR $HOME/src/
 
 RUN R CMD build .
 
-ENV NOT_CRAN TRUE
+ENV NOT_CRAN true
 
 RUN R CMD check --no-manual *tar.gz
 
