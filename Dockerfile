@@ -63,3 +63,4 @@ ENV OPENSSL_CONF /etc/ssl/
 
 RUN R CMD check --no-manual *tar.gz
 
+RUN Rscript "check_checks.R"

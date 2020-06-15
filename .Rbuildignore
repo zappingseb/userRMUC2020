@@ -4,3 +4,4 @@
 ^Dockerfile$
 ^cloudbuild\.yaml$
 ^pptx/*
+^check_checks.R$

@@ -12,7 +12,7 @@ counterButton <- function(id, label = "Counter") {
 counter <- function(input, output, session) {
   count <- reactiveVal(0)
   observeEvent(input$button, {
-    count(count() + 2)
+    count(count() + 1)
   })
   output$out <- renderText({
     count()
