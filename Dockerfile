@@ -1,4 +1,4 @@
-FROM rocker/tidyverse
+FROM rocker/tidyverse:3.6.3
 MAINTAINER Sebastian Engel-Wolf (sebastian@mail-wolf.de)
 
 ## Install packages from CRAN
