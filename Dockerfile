@@ -40,8 +40,13 @@ RUN install2.r --error \
     ## clean up
     && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
 
+RUN R --vanilla -e "shinytest::installDependencies()"
 
 COPY . $HOME/src/
 
 WORKDIR $HOME/src/
+
+RUN R CMD build .
+
+RUN R CMD check *tar.gz
 
