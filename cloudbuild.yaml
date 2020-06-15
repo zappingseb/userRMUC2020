@@ -1,5 +1,5 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/useRMUC2020/app-image', '.']
-images: ['gcr.io/useRMUC2020/app-image']
+  args: ['build', '-t', 'gcr.io/userrmuc2020/app-image', '.']
+images: ['gcr.io/userrmuc2020/app-image']
 timeout: 1200s
