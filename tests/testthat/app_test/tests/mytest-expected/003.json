@@ -1,0 +1,53 @@
+{
+  "input": {
+    "counter1-antibody": "IgA"
+  },
+  "output": {
+    "counter1-distribution_plot": {
+      "src": "[image data sha1: e3030d69eaae5ad146e0cec518430cb4c90dec4a]",
+      "width": 962,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -3.8,
+              "right": 101.8,
+              "bottom": -0.000734836678536915,
+              "top": 0.0154315702492752
+            },
+            "mapping": {
+              "y": null,
+              "x": "x",
+              "fill": "y"
+            },
+            "range": {
+              "left": 46.1506849315068,
+              "right": 865.843287671233,
+              "bottom": 365.849315068493,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 962,
+          "height": 400
+        }
+      }
+    },
+    "counter1-summary_table": "<table  class = 'table shiny-table table- spacing-s' style = 'width:auto;'>\n<thead> <tr> <th style='text-align: left;'> y <\/th> <th style='text-align: right;'> mean <\/th> <th style='text-align: right;'> median <\/th> <th style='text-align: right;'> lower_quantile <\/th> <th style='text-align: right;'> upper_quantile <\/th>  <\/tr> <\/thead> <tbody>\n  <tr> <td> Drug <\/td> <td align=\"right\"> 50.31 <\/td> <td align=\"right\"> 40.50 <\/td> <td align=\"right\"> 23.00 <\/td> <td align=\"right\"> 84.50 <\/td> <\/tr>\n  <tr> <td> no treament <\/td> <td align=\"right\"> 51.59 <\/td> <td align=\"right\"> 51.00 <\/td> <td align=\"right\"> 20.00 <\/td> <td align=\"right\"> 83.20 <\/td> <\/tr>\n  <tr> <td> Placebo <\/td> <td align=\"right\"> 47.76 <\/td> <td align=\"right\"> 44.00 <\/td> <td align=\"right\"> 15.00 <\/td> <td align=\"right\"> 87.00 <\/td> <\/tr>\n   <\/tbody> <\/table>"
+  },
+  "export": {
+
+  }
+}

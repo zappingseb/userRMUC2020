@@ -1,0 +1,25 @@
+Package: useRMUCDemo
+Title: A Demo of an R-package with an interactive UI test
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "SEbastian",
+           family = "Engel-Wolf",
+           role = c("aut", "cre"),
+           email = "sebastian@mail-wolf.de")
+Description: This package shows how to use Google Cloud Automation to check an R-package with 
+  a shiny app and run a shinytest.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.0
+Depends:
+  R (>= 3.5.0),
+  shiny
+Imports:
+  dplyr,
+  ggplot2,
+  magrittr
+Suggests:
+ testthat,
+ shinytest

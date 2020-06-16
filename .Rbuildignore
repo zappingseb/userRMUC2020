@@ -1,0 +1,8 @@
+^userRMUC2020\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^Dockerfile$
+^cloudbuild\.yaml$
+^pptx/.*\.pptx
+^check_checks.R$
+^img/*

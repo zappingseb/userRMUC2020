@@ -1,0 +1,53 @@
+{
+  "input": {
+    "counter1-antibody": "IgG"
+  },
+  "output": {
+    "counter1-distribution_plot": {
+      "src": "[image data sha1: dbffcb8960f0e7729b582b33aa84183422e651b2]",
+      "width": 962,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 58.1045649493617,
+              "right": 385.70363874564,
+              "bottom": -0.00084388219904726,
+              "top": 0.0177215261799925
+            },
+            "mapping": {
+              "y": null,
+              "x": "x",
+              "fill": "y"
+            },
+            "range": {
+              "left": 46.1506849315068,
+              "right": 863.843287671233,
+              "bottom": 365.849315068493,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 962,
+          "height": 400
+        }
+      }
+    },
+    "counter1-summary_table": "<table  class = 'table shiny-table table- spacing-s' style = 'width:auto;'>\n<thead> <tr> <th style='text-align: left;'> y <\/th> <th style='text-align: right;'> mean <\/th> <th style='text-align: right;'> median <\/th> <th style='text-align: right;'> lower_quantile <\/th> <th style='text-align: right;'> upper_quantile <\/th>  <\/tr> <\/thead> <tbody>\n  <tr> <td> Drug <\/td> <td align=\"right\"> 116.05 <\/td> <td align=\"right\"> 115.66 <\/td> <td align=\"right\"> 90.30 <\/td> <td align=\"right\"> 146.36 <\/td> <\/tr>\n  <tr> <td> no treatment <\/td> <td align=\"right\"> 194.77 <\/td> <td align=\"right\"> 181.79 <\/td> <td align=\"right\"> 149.47 <\/td> <td align=\"right\"> 253.42 <\/td> <\/tr>\n  <tr> <td> Placebo <\/td> <td align=\"right\"> 196.79 <\/td> <td align=\"right\"> 191.00 <\/td> <td align=\"right\"> 125.23 <\/td> <td align=\"right\"> 295.45 <\/td> <\/tr>\n   <\/tbody> <\/table>"
+  },
+  "export": {
+
+  }
+}
