@@ -310,3 +310,18 @@ On Github this can be done for this repo at: https://github.com/zappingseb/userR
 After creating the **Pull Request** Google Cloud Build will automatically start to check the code and prevent the user from merging:
 
 ![](inst/img/05_github_cloudbuild.png)
+
+So let's imagine the code of the function `summary_table` was changed in the wrong way again:
+
+```r
+summary_table <- function(x, y) {
+  data.frame(x = x, y = y) %>%
+    dplyr::group_by(y) %>%
+    dplyr::summarise(
+      mean = mean(x),
+      median = median(x),
+      lower_quantile = quantile(x, 0.01),
+      upper_quantile = quantile(x, 0.99)
+    )
+}
+```
