@@ -4,28 +4,32 @@ This is a talk given as a *Lightning talk* at the [userR European Hub 2020](http
 
 ## Introduction
 
-Drug development is important for people's life. Especially in the times of COVID-19 you want to make sure drugs get developed fast and secure. Imagine you found a new drug that can change Antibody levels against COVID-19, or any other disease. A statistical evaluation will decide if the drug goes to market or not. Therefore the following questions need to be answered:
+Drug development is important for people's life. Especially in the times of COVID-19 you want to make sure drugs get developed fast and secure. Imagine a company found a new drug that can change Antibody levels against COVID-19, or any other disease. A statistical evaluation will decide if the drug goes to market or not. Therefore the following questions need to be answered:
 
 * Does it increase/decrease people's Antibody level or not?
 * Does the drug perform better or worse compared to a placebo?
 
 Two experiments were carried out to answer this question. One checking IgG Antibody levels, and one checking out IgA antibody levels. In a **real use-case** many more experiments would be carried out. But let's leave it simple.
 
-The following story will show you what can happen if your co-workers mess with your 
+The following story will show how to create such an analysis. Afterwards the story will focus on how you can make sure, your analysis does not get messed up by co-workers or stake-holders inserting new features or changing code.
+
 ## Statistical evaluations
 
 To check the drug the clinician ask as for the following statistical evaluations:
 
 1. A summary table showing the Antibody levels with/without treatment including distribution quantiles. It is
-  important for the outcome, that distributions do not overlap for a certain percentage of patients.
+  important for the outcome, that distributions of Antibody levels do not overlap between treated and untreated subjects.
 2. A distribution plot of the Antibody levels with/without treatment
-3. A shiny-app where the user can switch between the antibodies and see both 
+3. A shiny-app where the user can switch between the antibodies and see both analysis with just a few clicks.
 
 ![](inst/img/01_statistical_evaluations.png)
 
 ## The standard way of working
 
-So now if a Statistician would see these requirements, he or she would start writing a script, let's call it `summary_script.R` and an app called `app.R`. Maybe some libraries like `dplyr` or `ggplot2` would be used. 
+So now if a Statistician would see these requirements, he or she would start writing a script. Let's call it `summary_script.R`. Additionally, there would be the app called `app.R`.
+
+
+### Experimental data
 
 In this case imagine the experimental data would be provided as a list that has the following structure:
 
@@ -39,11 +43,9 @@ experimental_data
   |- treatment (factor)
 ```
 
-
 ### Analysis script
 
 The script would contain something like this:
-
 
 ```r
 # ---- * summary table IgG ----
@@ -75,10 +77,7 @@ the outcome would be the following:
 
 ![](inst/img/02_distribution_plot.png)
 
-There would be two take aways:
 
-1. The drug lowers the IgG levels by 30%.
-2. There is no overlap between the `no_treatment` and `drug` distributions (checked for 80% of the patients).
 
 ### Analysis App
 
@@ -117,9 +116,18 @@ shinyApp(ui, server)
 
 ![](inst/img/03_app_screenshot.png)
 
+### Evaluation of the drug
+
+There are two take-aways from the table and the column
+
+1. The drug lowers the IgG levels by 40% (from 195 to 116).
+2. There is no overlap between the `no_treatment` and `drug` distributions (checked for 80% of the patients).
+
+This means from this one analysis, you would consider the drug for future use.
+
 ## Here comes the problem!
 
-Now imagine you are gone during your vacation and your co-worker get's your code. Additionally there is a request from the Clinician, to add the *Standard Deviation* to the summary table, as the Clinician is familiar with this indicator.
+Now imagine you are gone during your vacation. Your co-worker get's your code. Additionally there is a request from the Clinician, to add the *Standard Deviation* to the summary table, as the Clinician is familiar with this indicator.
 
 Your co-worker takes your script and changes the following in the `summary_script.R` and `app.R`.
 
@@ -147,14 +155,16 @@ the outcome would be the following:
 
 These numbers get reported in the clinical study report. You come back after your vacation and you notice:
 
-:warning: The distributions of `no treatment` and `drug` now overlap :warning:
+:warning: The distributions of `no treatment` and `drug` now overlap. The drug is **not** considered for future use. :warning:
+
+---
 
 *What is critical about this?* The drug might not go to market, because this was an exclusion criterium for
 the drug. These distributions shall not overlap.
 
 *Why is that?* Because your co-worker did not only add the `sd`, but also changed the quantile levels from 90% to 99%.
 
-*How long will it take you to find this?* This depends on how you have stored the script, if you can compare values. How did you store the app...
+*How long will it take you to find this?* This depends on how you have stored the script? In git it is simple to see. Anywhere else it might be difficult.
 
 *How can you avoid this?* This is what the following chapter is about!
 
@@ -288,6 +298,7 @@ context("App with table and plot")
 test_that("app works", {
   expect_pass(testApp("app_test", compareImages = FALSE, interactive = FALSE))
 })
+```
 
 ### Use Jenkins / Travis CI / GoogleCloudBuild for automatic testing
 
@@ -300,16 +311,6 @@ Now you need to include any CI tool to automatically run package checks upon pus
 This example project was setup with [GoogleCloudBuild](https://console.cloud.google.com/cloud-build/builds/f2bfda2f-4c67-4c9c-b73d-9bd031220699?project=736775587969)
 
 ## See what happens upon a user changing code the wrong way
-
-The `master` branch of your project should be protected. There are several ways to do so depending on whether you use Github, Gitlab or Bitbucket. This means anyone who wants to contribute to your code needs to open a **Pull Request** or **Merge Request**.
-
-On Github this can be done for this repo at: https://github.com/zappingseb/userRMUC2020/compare and looks like this:
-
-![](inst/img/04_create_PR.png)
-
-After creating the **Pull Request** Google Cloud Build will automatically start to check the code and prevent the user from merging:
-
-![](inst/img/05_github_cloudbuild.png)
 
 So let's imagine the code of the function `summary_table` was changed in the wrong way again:
 
@@ -326,7 +327,49 @@ summary_table <- function(x, y) {
 }
 ```
 
-This user creates a **Pull Request** with these changes:
+### Without CI/CD
+
+So now the co-worker need to run `devtools::test()` on the local machine and will receive the following:
+
+```r
+...
+--------------------------------------------------------------------------------
+x |   4 2     | numerical testing [0.2 s]
+--------------------------------------------------------------------------------
+test_numeric.R:8: failure: summary table
+result$lower_quantile not equal to c(90.29758, 149.46806, 125.22527).
+3/3 mismatches (average diff: 12.3)
+[1]  76 -  90.3 == -14.33
+[2] 137 - 149.5 == -12.49
+[3] 115 - 125.2 ==  -9.97
+
+test_numeric.R:15: failure: summary table
+result$lower_quantile not equal to c(23, 20, 15).
+3/3 mismatches (average diff: 11.1)
+[1]  8.05 - 23 == -14.95
+[2] 14.96 - 20 ==  -5.04
+[3]  1.80 - 15 == -13.20
+--------------------------------------------------------------------------------
+
+== Results =====================================================================
+Duration: 20.6 s
+
+OK:       4
+Failed:   3
+Warnings: 0
+Skipped:  0
+
+```
+
+As you see, the co-worker would need to run it anytime and additionally wait 20 seconds. What if your co-worker forgets to run it? He or she can still add some code to your repository.
+
+### With CI/CD
+
+With CI/CD and git you can use some nice features of both. The `master` branch of your project can be protected. There are several ways to do so depending on whether you use Github, Gitlab or Bitbucket. On Github Protection can be used not to allow direct pushes + only allow to merge code into the `master` branch upon passing all CI/CD checks. This can be any CI/CD tool integrated with Github.
+
+This means anyone who wants to contribute to your code needs to open a **Pull Request** or **Merge Request**.
+
+On Github this can be done for this repo at: https://github.com/zappingseb/userRMUC2020/compare and looks like this:
 
 ![](inst/img/06_coworker_changes.png)
 
@@ -338,3 +381,13 @@ This means the co-worker cannot add the new code. Going into the details inside 
 
 ![](inst/img/07_check_detail.png)
 
+:trophy: So when coming back from vacation, you should be saved from a small change of your co-worker, destroying your code-base. :trophy:
+
+## Learnings
+
+You should have taken the following from this repository:
+
+* Wrapping everything in an R-package allows some simple checks
+* `testthat` is a simple tool to double check some calculated values
+* `shinytest` can be used to even have fail-proof shiny apps
+* CI/CD Tools save a lot of time on checking R-packages
