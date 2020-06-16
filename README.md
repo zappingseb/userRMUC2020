@@ -21,7 +21,7 @@ To check the drug the clinician ask as for the following statistical evaluations
 2. A distribution plot of the Antibody levels with/without treatment
 3. A shiny-app where the user can switch between the antibodies and see both 
 
-![](img/01_statistical_evaluations.png)
+![](inst/img/01_statistical_evaluations.png)
 
 ## The standard way of working
 
@@ -73,7 +73,7 @@ the outcome would be the following:
 3 Placebo       197.   191.          125.            295.
 ```
 
-![](img/02_distribution_plot.png)
+![](inst/img/02_distribution_plot.png)
 
 There would be two take aways:
 
@@ -115,7 +115,7 @@ server <- function(input, output) {
 shinyApp(ui, server)
 ```
 
-![](img/03_app_screenshot.png)
+![](inst/img/03_app_screenshot.png)
 
 ## Here comes the problem!
 
@@ -185,4 +185,119 @@ All three topics are important for R-coding. But as *Version Control* and *R pac
 
 ## Automatic checks
 
+So now imagine, instead of writing a `summary_script.R` and `app.R` file you did the following:
+
+* Wrap everything into an R-package
+* Write a function `summary_table`
+* Write a function `summary_plot`
+* Include a shiny-module called `summaryModule` with the functions `summaryUI` and `summaryServer`
+* Store your code inside Github and protect the `master` branch from direct commits
+
+## How to make it fail proof?
+
+### Include a test for the numerics
+
+As a first input, I recommend using [`testthat`](https://testthat.r-lib.org/) to test your R package. To use it
+you need to include a file `testthat.R` in the `tests` folder of your package. This file only contains the code
+
+```r
+library(testthat)
+
+testthat::test_check("useRMUCDemo")
+```
+
+Then you continue and create the directory `tests/testthat` inside which you create the file `test_numerics.R`. This file contains a check for the quantiles for an example data set:
+
+```r
+context("numerical testing")
+
+test_that("summary table", {
+  data("experimental_data")
+  
+  result <- expect_silent(summary_table(experimental_data$IgG$meas, experimental_data$IgG$treatment))
+  
+  expect_equal(
+    result$lower_quantile,
+    c(90.29758, 149.46806, 125.22527)
+  )
+  
+  result <- expect_silent(summary_table(experimental_data$IgA$meas, experimental_data$IgA$treatment))
+  
+  expect_equal(
+    result$lower_quantile,
+    c(23, 20, 15)
+  )
+})
+
+```
+
+Now if you run `devtools::test()` inside your package, you will get this output:
+
+```r
+Loading useRMUCDemo
+Testing useRMUCDemo
+√ |  OK F W S | Context
+√ |   4       | numerical testing
+
+== Results =====================================================================
+OK:       4
+Failed:   0
+Warnings: 0
+Skipped:  0
+```
+
+These checks will also run if you use `R CMD check`.
+
+### Include an app for shinytest
+
+A guide on how to use shinytest in an R-package can be found here: https://rstudio.github.io/shinytest/articles/package.html.
+
+After you have read the guide, you can setup a test app like this:
+
+```r
+source("../shinytest_load_pckg.R")
+
+eval(shinytest_load_pckg("useRMUCDemo"))
+
+data(experimental_data)
+
+ui <- fluidPage(
+  summaryUI("counter1", dataset = experimental_data)
+)
+
+server <- function(input, output, session) {
+  callModule(summaryServer, "counter1", dataset = experimental_data)
+}
+
+shinyApp(ui, server)
+```
+
+`shinytest_load_pckg` will provide some code to load the package while in `devtools::test()` or `devtools::check()` or `R CMD check`. Because all of those have different behaviour.
+
+Now you can store the app inside `tests/testthat/app_test/app.R` and record a shinytest.
+
+```r
+shinytest::recordTest("app_test")
+```
+
+Creating a file `tests/testthat/test_app.R` with this content will allow to test the app within `devtools::test()`:
+
+```r
+library(shinytest)
+context("App with table and plot")
+test_that("app works", {
+  expect_pass(testApp("app_test", compareImages = FALSE, interactive = FALSE))
+})
+
+### Use Jenkins / Travis CI / GoogleCloudBuild for automatic testing
+
+Now you need to include any CI tool to automatically run package checks upon pushing to Github. There are several guides available for this:
+
+* [Travis CI for R — Advanced guide](https://towardsdatascience.com/travis-ci-for-r-advanced-guide-719cb2d9e0e5?gi=906d5a74e98b)
+* [ R scripts in the cloud, via Cloud Run, Cloud Build and Cloud Scheduler.](https://code.markedmondson.me/googleCloudRunner/)
+* [How to test your internal packages - discussion](https://community.rstudio.com/t/how-do-you-test-your-internal-packages-travis-jenkins-by-hand/13002)
+
+This example project was setup with [GoogleCloudBuild](https://console.cloud.google.com/cloud-build/builds/f2bfda2f-4c67-4c9c-b73d-9bd031220699?project=736775587969)
+
+## See what happens upon a user changing code the wrong way
 
