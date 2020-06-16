@@ -4,5 +4,6 @@
 ^Dockerfile$
 ^cloudbuild\.yaml$
 ^pptx/.*\.pptx
+^inst/img/.*\.png$
 ^check_checks.R$
 ^img/*
