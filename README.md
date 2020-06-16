@@ -301,3 +301,12 @@ This example project was setup with [GoogleCloudBuild](https://console.cloud.goo
 
 ## See what happens upon a user changing code the wrong way
 
+The `master` branch of your project should be protected. There are several ways to do so depending on whether you use Github, Gitlab or Bitbucket. This means anyone who wants to contribute to your code needs to open a **Pull Request** or **Merge Request**.
+
+On Github this can be done for this repo at: https://github.com/zappingseb/userRMUC2020/compare and looks like this:
+
+![](inst/img/04_create_PR.png)
+
+After creating the **Pull Request** Google Cloud Build will automatically start to check the code and prevent the user from merging:
+
+![](inst/img/05_github_cloudbuild.png)
