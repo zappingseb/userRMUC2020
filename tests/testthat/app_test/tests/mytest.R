@@ -3,6 +3,8 @@ app$snapshotInit("mytest")
 
 app$snapshot()
 app$setInputs(`counter1-antibody` = "IgG")
+Sys.sleep(1)
 app$snapshot()
 app$setInputs(`counter1-antibody` = "IgA")
+Sys.sleep(1)
 app$snapshot()
