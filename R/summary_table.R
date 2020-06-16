@@ -31,7 +31,7 @@
 #' summary_table(x, y)
 summary_table <- function(x, y) {
   stopifnot(is.numeric(x))
-  stopifnot(is.factor(y))
+  stopifnot(is.factor(y))s
   
   data.frame(x = x, y = y) %>%
     dplyr::group_by(y) %>%
