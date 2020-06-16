@@ -4,7 +4,7 @@
   },
   "output": {
     "counter1-distribution_plot": {
-      "src": "[image data sha1: 678b0c8e3b21f5268478e1669d1788789e64323a]",
+      "src": "[image data sha1: dbffcb8960f0e7729b582b33aa84183422e651b2]",
       "width": 962,
       "height": 400,
       "coordmap": {
@@ -32,10 +32,10 @@
               "fill": "y"
             },
             "range": {
-              "left": 47.1506800301882,
-              "right": 858.843198394384,
-              "bottom": 365.849223606164,
-              "top": 5.47945068493151
+              "left": 46.1506849315068,
+              "right": 863.843287671233,
+              "bottom": 365.849315068493,
+              "top": 5.47945205479452
             }
           }
         ],

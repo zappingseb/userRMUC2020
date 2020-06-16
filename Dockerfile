@@ -52,15 +52,17 @@ RUN set -x  \
  && su phantomjs -s /bin/sh -c "phantomjs --version"
 
 
-COPY . $HOME/src/
+COPY . /home/rstudio/src
 
-WORKDIR $HOME/src/
+WORKDIR /home/rstudio/src
 
 RUN R CMD build .
 
 ENV NOT_CRAN true
 ENV OPENSSL_CONF /etc/ssl/
 
+RUN chown -R rstudio:rstudio /home/rstudio/src/**
 RUN R CMD check --no-manual *tar.gz
 
 RUN Rscript "check_checks.R"
+
