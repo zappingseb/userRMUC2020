@@ -325,3 +325,16 @@ summary_table <- function(x, y) {
     )
 }
 ```
+
+This user creates a **Pull Request** with these changes:
+
+![](inst/img/06_coworker_changes.png)
+
+So see what happens when the GoogleCloudBuild is finished:
+
+![](inst/img/06_coworker_changes_fail.png)
+
+This means the co-worker cannot add the new code. Going into the details inside GoogleCloudBuild it is even possible to see why the code fails:
+
+![](inst/img/07_check_detail.png)
+
