@@ -11,11 +11,13 @@ Drug development is important for people's life. Especially in the times of COVI
 
 Two experiments were carried out to answer this question. One checking IgG Antibody levels, and one checking out IgA antibody levels. In a **real use-case** many more experiments would be carried out. But let's leave it simple.
 
+The following story will show you what can happen if your co-workers mess with your 
 ## Statistical evaluations
 
 To check the drug the clinician ask as for the following statistical evaluations:
 
-1. A summary table showing the Antibody levels with/without treatment including distribution quantiles.
+1. A summary table showing the Antibody levels with/without treatment including distribution quantiles. It is
+  important for the outcome, that distributions do not overlap for a certain percentage of patients.
 2. A distribution plot of the Antibody levels with/without treatment
 3. A shiny-app where the user can switch between the antibodies and see both 
 
@@ -50,13 +52,13 @@ experimental_data$IgG %>%
   dplyr::summarise(
     mean = mean(meas),
     median = median(meas),
-    lower_quantile = quantile(meas, 0.25),
-    upper_quantile = quantile(meas, 0.75)
+    lower_quantile = quantile(meas, 0.1),
+    upper_quantile = quantile(meas, 0.9)
   )
   
 # ---- * distribution plot IgG ----
 
-ggplot(experimental_data62.           231.$IgG, aes(x = meas, fill = treatment)) +
+ggplot(experimental_data$IgG, aes(x = meas, fill = treatment)) +
   geom_density(alpha = 0.5)
 ```
 
@@ -66,17 +68,17 @@ the outcome would be the following:
 # A tibble: 3 x 5
   treatment     mean median lower_quantile upper_quantile
   <fct>        <dbl>  <dbl>          <dbl>          <dbl>
-1 Drug          126.   126.           110.           141.
-2 no treatment  195.   182.           1
-3 Placebo       197.   191.           137.           241.
+1 Drug          116.   116.           90.3           146.
+2 no treatment  195.   182.          149.            253.
+3 Placebo       197.   191.          125.            295.
 ```
 
 ![](img/02_distribution_plot.png)
 
 There would be two take aways:
 
-1. The drug lowers the IgG levels by 30%
-2. There is no overlap between the `no_treatment` and `drug` distributions (checked for 75% of the patients)
+1. The drug lowers the IgG levels by 30%.
+2. There is no overlap between the `no_treatment` and `drug` distributions (checked for 80% of the patients).
 
 ### Analysis App
 
@@ -138,7 +140,7 @@ the outcome would be the following:
 # A tibble: 3 x 6
   treatment     mean median lower_quantile upper_quantile    sd
   <fct>        <dbl>  <dbl>          <dbl>          <dbl> <dbl>
-1 Drug          126.   126.           86.0           166.  21.4
+1 Drug          116.   116.           76.0           156.  21.4
 2 no treatment  195.   182.          137.            278.  41.1
 3 Placebo       197.   191.          115.            362.  65.7
 ```
@@ -147,23 +149,40 @@ These numbers get reported in the clinical study report. You come back after you
 
 :warning: The distributions of `no treatment` and `drug` now overlap :warning:
 
-Why is that? Because your co-worker 
-1) A script that runs the table and the plot
-2) An app that you can execute to see both. Hopefully the app already contains a shiny-module.
+*What is critical about this?* The drug might not go to market, because this was an exclusion criterium for
+the drug. These distributions shall not overlap.
 
-Now imagine your team continuing to develop the summary table and adding new features to it. You still want:
+*Why is that?* Because your co-worker did not only add the `sd`, but also changed the quantile levels from 90% to 99%.
 
-1. The summary values to be right
-2. The plot to work
-3. The app to work right
+*How long will it take you to find this?* This depends on how you have stored the script, if you can compare values. How did you store the app...
 
-How would you enable this? Anytime your co-worker changes the script you would test it? Would you see if he changes quantile levels or renames the inputIDs of the shiny app each time? Maybe not.
+*How can you avoid this?* This is what the following chapter is about!
+
+## Enhancing collaboration on data science projects in R
 
 There are three things that will make it way easier to collaborate:
 
-1. Version control in e.g. Github
-2. Wrapping your code into an R-package with tests
-3. Allow changes to version control only upon passing all tests inside a designated environment
+### Version control in e.g. Github
 
-Today I want to talk only about **3**. Automatically running checks and tests in a designated environment is what **CI/CD** systems do
+makes it easy to track changes and even revert them.
+
+### Wrapping your code into an R-package with tests
+
+Allows you to have some basic documentation, double check by `R CMD check` everytime a new user adds code.
+
+### Run checks automatically
+
+Running checks every time a user changes your code, allows you to control:
+
+* act fast!
+* the environment the checks run in
+* the possibility to add code to your code-base
+* give coders feedback without needing to ask their co-workers
+
+---
+
+All three topics are important for R-coding. But as *Version Control* and *R packages* are a standard in developing R. I will only focus on *Run checks automatically*
+
+## Automatic checks
+
 

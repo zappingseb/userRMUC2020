@@ -23,7 +23,7 @@ summary_plot(x, y)
 
 set.seed(1)
 x <- c(
-  rnorm(50, 100, sd = 25),
+  rnorm(50, 115, sd = 25),
   rnorm(50, 198, sd = 65),
   sample(rnorm(50, 195, sd = 45), 50, TRUE)
 )

@@ -1,5 +1,5 @@
 library(shinytest)
-context("app with counter")
+context("App with table and plot")
 # This file is for testing the applications in the inst/ directory.
 windows_report_test <- function(appDir, testname = "mytest") {
   cat("\n")

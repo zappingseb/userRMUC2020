@@ -7,6 +7,7 @@
 #' @export
 #' @import magrittr
 #' @importFrom dplyr group_by summarise
+#' @importFrom stats median quantile
 #' @examples 
 #' set.seed(1)
 #' x <- sample(1:100, 50, replace = TRUE)
@@ -16,8 +17,8 @@
 #' 
 #' set.seed(1)
 #' x <- c(
+#'   rnorm(50, 115, sd = 25),
 #'   rnorm(50, 198, sd = 65),
-#'   rnorm(50, 100, sd = 25),
 #'   sample(rnorm(50, 195, sd = 45), 50, TRUE)
 #' )
 #' 
@@ -37,8 +38,8 @@ summary_table <- function(x, y) {
     dplyr::summarise(
       mean = mean(x),
       median = median(x),
-      q25 = quantile(x, 0.25),
-      q75 = quantile(x, 0.75)
+      lower_quantile = quantile(x, 0.1),
+      upper_quantile = quantile(x, 0.9)
     )
   
 }
@@ -59,7 +60,7 @@ summary_table <- function(x, y) {
 #' 
 #' set.seed(1)
 #' x <- c(
-#'   rnorm(50, 100, sd = 25),
+#'   rnorm(50, 115, sd = 25),
 #'   rnorm(50, 198, sd = 65),
 #'   sample(rnorm(50, 195, sd = 45), 50, TRUE)
 #' )
