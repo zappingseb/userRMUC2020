@@ -38,8 +38,8 @@ summary_table <- function(x, y) {
     dplyr::summarise(
       mean = mean(x),
       median = median(x),
-      lower_quantile = quantile(x, 0.1),
-      upper_quantile = quantile(x, 0.9)
+      lower_quantile = quantile(x, 0.01),
+      upper_quantile = quantile(x, 0.99)
     )
   
 }
